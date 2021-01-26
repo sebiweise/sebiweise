@@ -8,8 +8,8 @@
 
 ### Connect with me:
 
-<a href="https://twitter.com/sebiweise" target="blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/twitter.svg" alt="sebiweise" height="22" width="22" /></a>
-<a href="https://linkedin.com/in/sebastian-weise" target="blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/linkedin.svg" alt="sebastian-weise" height="22" width="22" /></a>
+<a href="https://twitter.com/sebiweise" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@4.8.0/icons/twitter.svg" alt="sebiweise" height="22" width="22" /></a>
+<a href="https://linkedin.com/in/sebastian-weise" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@4.8.0/icons/linkedin.svg" alt="sebastian-weise" height="22" width="22" /></a>
 
 ### Languages and Tools:
 
