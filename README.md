@@ -1,5 +1,4 @@
 ### Hi there 👋, I´m Sebastian
-![Twitter Follow](https://img.shields.io/twitter/follow/sebiweise?label=sebiweise&logo=twitter&style=for-the-badge)
 ![GitHub followers](https://img.shields.io/github/followers/sebiweise?logo=GitHub&style=for-the-badge)
 
 - 🔭 I’m currently working on a HomeAssistant integration for [Parcello](https://www.parcello.org/)
