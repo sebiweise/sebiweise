@@ -9,6 +9,11 @@
 
 <a href="https://linkedin.com/in/sebastian-weise" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@4.8.0/icons/linkedin.svg" alt="sebastian-weise" height="22" width="22" /></a>
 
+<div><img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=sebiweise&layout=compact&hide=html" alt="sebiweise" /></div>
+<br />
+<br />
+<div><img align="center" src="https://github-readme-stats.vercel.app/api?username=sebiweise&show_icons=true" alt="sebiweise" /></div>
+
 ### Languages and Tools:
 
 - Angular
