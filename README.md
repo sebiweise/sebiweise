@@ -5,15 +5,6 @@
 - 🌱 I’m currently learning **Flutter, SwiftUI, Python**
 - 👯 I’m looking to collaborate with **other content creators**
 
-<a href="https://github.com/sebiweise" target="_blank">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=sebiweise&layout=compact&hide=html" alt="sebiweise" />
-</a>
-<br />
-<br />
-<a href="https://github.com/sebiweise" target="_blank">
-  <img align="center" src="https://github-readme-stats.vercel.app/api?username=sebiweise&show_icons=true&count_private=true" alt="sebiweise" />
-</a>
-
 ### Languages and Tools:
 
 - Next.js
