@@ -5,10 +5,6 @@
 - 🌱 I’m currently learning **Flutter, SwiftUI, Python**
 - 👯 I’m looking to collaborate with **other content creators**
 
-### Connect with me:
-
-<a href="https://linkedin.com/in/sebastian-weise" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@4.8.0/icons/linkedin.svg" alt="sebastian-weise" height="22" width="22" /></a>
-
 <a href="https://github.com/sebiweise" target="_blank">
   <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=sebiweise&layout=compact&hide=html" alt="sebiweise" />
 </a>
@@ -20,7 +16,10 @@
 
 ### Languages and Tools:
 
+- Next.js
+- React
 - Angular
+- Vue
 - Dart
 - Firebase
 - Flutter
@@ -30,7 +29,6 @@
 - Windows
 - MySQL
 - MSSQL
-- Python
 
 <!--
 **sebiweise/sebiweise** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
