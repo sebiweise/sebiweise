@@ -1,7 +1,7 @@
 ### Hi there 👋, I´m Sebastian
 ![GitHub followers](https://img.shields.io/github/followers/sebiweise?logo=GitHub&style=for-the-badge)
 
-- 🔭 I’m currently working on [unsaged](https://github.com/jorge-menjivar/unsaged) and [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui).
+- 🔭 I’m currently working on [spliit](https://github.com/spliit-app/spliit).
 - 🌱 I’m currently learning **Flutter, SwiftUI**
 - 👯 I’m looking to collaborate with **other content creators**
 
