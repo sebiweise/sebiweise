@@ -1,7 +1,7 @@
 ### Hi there 👋, I´m Sebastian
 ![GitHub followers](https://img.shields.io/github/followers/sebiweise?logo=GitHub&style=for-the-badge)
 
-- 🔭 I’m currently working on [spliit](https://github.com/spliit-app/spliit).
+- 🔭 I’m currently working on [azure-devops-gitleaks](https://github.com/JoostVoskuil/azure-devops-gitleaks).
 - 🌱 I’m currently learning **Flutter, SwiftUI**
 - 👯 I’m looking to collaborate with **other content creators**
 
