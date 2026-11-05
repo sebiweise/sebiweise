@@ -1,37 +1,26 @@
-### Hi there 👋, I´m Sebastian
+### Hi there 👋, I'm Sebastian
+
 ![GitHub followers](https://img.shields.io/github/followers/sebiweise?logo=GitHub&style=for-the-badge)
 
-- 🔭 I’m currently working on [azure-devops-gitleaks](https://github.com/JoostVoskuil/azure-devops-gitleaks).
-- 🌱 I’m currently learning **Flutter, SwiftUI**
-- 👯 I’m looking to collaborate with **other content creators**
+DevOps Specialist at [KEOZ GmbH](https://www.keoz.com) in Germany. I take care of operations, automation, deployments and CI/CD, drawing on my background in software development, cloud and infrastructure to keep systems reliable and scalable. On the side, I work as a developer at [Implet](https://www.implet.com).
 
-### Languages and Tools:
+- 🌐 Portfolio: [goscinski.dev](https://goscinski.dev)
+- 💼 LinkedIn: [sebastian-weise](https://www.linkedin.com/in/sebastian-weise)
+- 🚒 Volunteer firefighter at Freiwillige Feuerwehr Langenfeld
 
-- Next.js
-- React
-- Angular
-- Vue
-- Dart
-- Firebase
-- Flutter
-- Git
-- ASP.NET (Framework) MVC/Core
+### Projects
+
+- 🛡️ [security-workflows](https://github.com/sebiweise/security-workflows): reusable GitHub Actions workflow that security-scans any repo with open-source tools only: Semgrep (SAST), Trivy (dependencies, Dockerfile misconfigurations) and Gitleaks (secrets in git history).
+- 🔥 [Gemütlich](https://github.com/sebiweise/gemuetlich): turns a TV into a cosy room with a live-generated fireplace, weather and ambience scenes. [Live](https://gemuetlich.goscinski.dev)
+- 🧭 [Rückenwind](https://github.com/sebiweise/rueckenwind): open-source PWA that guides people with statutory health insurance in Germany towards an outpatient psychotherapy place. [Live](https://rueckenwind-web.vercel.app/)
+- 🏠 [Alamos for Home Assistant](https://github.com/sebiweise/home-assistant-alamos): Home Assistant integration for Alamos alerting (aPager PRO, AMweb), with alerts as sensors and events plus alert feedback.
+- 👤 [personal-portfolio](https://github.com/sebiweise/personal-portfolio): the source of my portfolio, built with Next.js and deployed on Vercel.
+
+### Languages and Tools
+
+- CI/CD, DevOps, Deployments
+- GitHub Actions
+- TypeScript, Node.js
+- Next.js, React
+- Python
 - Linux
-- Windows
-- MySQL
-- MSSQL
-
-<!--
-**sebiweise/sebiweise** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
