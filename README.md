@@ -14,7 +14,7 @@ DevOps Specialist at [KEOZ GmbH](https://www.keoz.com) in Germany. I take care o
 - 🔥 [Gemütlich](https://github.com/sebiweise/gemuetlich): turns a TV into a cosy room with a live-generated fireplace, weather and ambience scenes. [Live](https://gemuetlich.goscinski.dev)
 - 🧭 [Rückenwind](https://github.com/sebiweise/rueckenwind): open-source PWA that guides people with statutory health insurance in Germany towards an outpatient psychotherapy place. [Live](https://rueckenwind-web.vercel.app/)
 - 🏠 [Alamos for Home Assistant](https://github.com/sebiweise/home-assistant-alamos): Home Assistant integration for Alamos alerting (aPager PRO, AMweb), with alerts as sensors and events plus alert feedback.
-- 👤 [personal-portfolio](https://github.com/sebiweise/personal-portfolio): the source of my portfolio, built with Next.js and deployed on Vercel.
+- 👤 personal-portfolio: the source of my portfolio, built with Next.js and deployed on Vercel.
 
 ### Languages and Tools
 
