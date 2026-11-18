@@ -1,3 +1,9 @@
+<img src="./assets/whoami.svg" alt="sebiweise@github ~ $ whoami" width="100%">
+
+<img src="./assets/contributions.svg" alt="Contribution heatmap for the last year" width="100%">
+
+<img src="./assets/stats.svg" alt="Streaks, active days and contributions per month" width="100%">
+
 ### Hi there 👋, I'm Sebastian
 
 ![GitHub followers](https://img.shields.io/github/followers/sebiweise?logo=GitHub&style=for-the-badge)
@@ -26,3 +32,5 @@ DevOps Specialist at [KEOZ GmbH](https://www.keoz.com) in Germany. I take care o
 - Next.js, React
 - Python
 - Linux
+
+<sub>The terminal panels above are SVGs regenerated daily by [a GitHub Action](./.github/workflows/update-profile.yml) from the GitHub API (no third-party services).</sub>
