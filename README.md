@@ -1,8 +1,8 @@
-<img src="./assets/whoami.svg" alt="sebiweise@github ~ $ whoami" width="100%">
+<img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/whoami.svg" alt="sebiweise@github ~ $ whoami" width="100%">
 
-<img src="./assets/contributions.svg" alt="Contribution heatmap for the last year" width="100%">
+<img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/contributions.svg" alt="Contribution heatmap for the last year" width="100%">
 
-<img src="./assets/stats.svg" alt="Streaks, active days and contributions per month" width="100%">
+<img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/stats.svg" alt="Streaks, active days and contributions per month" width="100%">
 
 ### Hi there 👋, I'm Sebastian
 
