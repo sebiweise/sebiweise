@@ -41,14 +41,16 @@ jobs:
           GH_LOGIN: ${{ github.repository_owner }}
         run: node scripts/generate.mjs
 
-      - name: Commit changes
+      # master is protected (changes only via PR), so the generated SVGs live
+      # on their own orphan branch "output" that the README points to.
+      - name: Publish to output branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add assets
-          if git diff --cached --quiet; then
-            echo "No changes."
-            exit 0
-          fi
+          cd assets
+          git init -q -b output
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: update profile SVGs"
-          git push
+          git add .
+          git commit -q -m "chore: update profile SVGs ($(date -u +%F))"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" output
