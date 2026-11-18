@@ -1,0 +1,54 @@
+name: Update profile SVGs
+
+on:
+  schedule:
+    - cron: "17 4 * * *" # daily, 04:17 UTC – also picks up a new avatar
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - "scripts/**"
+      - "package*.json"
+      - ".github/workflows/update-profile.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-profile
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Generate SVGs
+        env:
+          # Optional: a fine-grained PAT (read-only, no repo access needed) as
+          # PROFILE_STATS_TOKEN. GITHUB_TOKEN works too; private contributions
+          # show up as long as "Private contributions" is enabled on the profile.
+          GH_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
+        run: node scripts/generate.mjs
+
+      - name: Commit changes
+        run: |
+          git add assets
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update profile SVGs"
+          git push
