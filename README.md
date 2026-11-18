@@ -33,4 +33,4 @@ DevOps Specialist at [KEOZ GmbH](https://www.keoz.com) in Germany. I take care o
 - Python
 - Linux
 
-<sub>The terminal panels above are SVGs regenerated daily by [a GitHub Action](./.github/workflows/update-profile.yml) from the GitHub API (no third-party services).</sub>
+<sub>The terminal panels above are SVGs regenerated daily by [a GitHub Action](./.github/workflows/update-profile.yml) from the GitHub API, including a halftone version of my current avatar (no third-party services).</sub>

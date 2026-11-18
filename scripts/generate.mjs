@@ -3,12 +3,15 @@
 //
 //   GH_TOKEN=... node scripts/generate.mjs               # live data from the GitHub API
 //   node scripts/generate.mjs --fixture data.json        # offline, from a saved API response
+//   node scripts/generate.mjs ... --avatar photo.jpg      # use a local image instead of the GitHub avatar
 //
-// No dependencies: Node 20+ (global fetch) is all it needs.
+// The whoami panel renders the current GitHub avatar as a halftone portrait, so changing
+// the profile picture updates the README on the next run.
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "assets");
@@ -27,7 +30,13 @@ const PROFILE = [
   ["web", "goscinski.dev"],
 ];
 
-// Pixel logo drawn as contribution cells ("#" = filled). Rects instead of
+// Halftone portrait settings
+const PORTRAIT = {
+  grid: 64, // dots per side
+  size: 264, // px the portrait occupies
+};
+
+// Fallback when the avatar can't be loaded. Pixel logo drawn as contribution cells ("#" = filled). Rects instead of
 // box-drawing characters, so it looks the same regardless of installed fonts.
 const LOGO = [
   ".####..###.",
@@ -68,6 +77,7 @@ const QUERY = `
 query($login: String!) {
   user(login: $login) {
     createdAt
+    avatarUrl(size: 400)
     followers { totalCount }
     repositories(ownerAffiliations: OWNER, privacy: PUBLIC, isFork: false) { totalCount }
     contributionsCollection {
@@ -154,6 +164,46 @@ function computeStats(data) {
 }
 
 // ---------------------------------------------------------------------------
+// Avatar → ASCII
+// ---------------------------------------------------------------------------
+async function loadAvatar(data) {
+  const i = process.argv.indexOf("--avatar");
+  try {
+    if (i !== -1) return await readFile(process.argv[i + 1]);
+    if (!data.user.avatarUrl) return null;
+    const res = await fetch(data.user.avatarUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return Buffer.from(await res.arrayBuffer());
+  } catch (err) {
+    console.warn(`⚠ avatar not loaded (${err.message}), using pixel logo`);
+    return null;
+  }
+}
+
+async function toHalftone(buf) {
+  const n = PORTRAIT.grid;
+  const { data } = await sharp(buf)
+    .resize(n * 4, n * 4, { fit: "cover", position: "centre" })
+    .greyscale()
+    .clahe({ width: 24, height: 24, maxSlope: 4 }) // local contrast, so faces stand out
+    .resize(n, n)
+    .normalise()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const values = [];
+  for (let y = 0; y < n; y++) {
+    for (let x = 0; x < n; x++) {
+      // soft circular vignette so busy backgrounds fade out
+      const dx = (x + 0.5) / n - 0.5;
+      const dy = (y + 0.5) / n - 0.5;
+      const fade = Math.max(0, Math.min(1, (0.52 - Math.hypot(dx, dy)) / 0.08));
+      values.push((data[y * n + x] / 255) * fade);
+    }
+  }
+  return values;
+}
+
+// ---------------------------------------------------------------------------
 // SVG helpers
 // ---------------------------------------------------------------------------
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c]);
@@ -186,13 +236,29 @@ ${body}
 // ---------------------------------------------------------------------------
 // 1) whoami – neofetch style
 // ---------------------------------------------------------------------------
-function whoamiSvg(s) {
+function whoamiSvg(s, dots) {
+  const TX = 312;
   const rows = [
     ...PROFILE,
     ["github", `${s.repos} public repos · ${s.followers} followers · ${s.years}y on GitHub`],
   ];
   const top = 96;
   const lh = 24;
+  const portrait = dots
+    ? (() => {
+        const n = PORTRAIT.grid;
+        const step = PORTRAIT.size / n;
+        const out = [];
+        dots.forEach((v, i) => {
+          const r = (step / 2) * Math.pow(v, 0.75);
+          if (r < 0.35) return;
+          const cx = 24 + (i % n) * step + step / 2;
+          const cy = top - 22 + Math.floor(i / n) * step + step / 2;
+          out.push(`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(2)}"/>`);
+        });
+        return `<g fill="#c9d1d9">${out.join("")}</g>`;
+      })()
+    : null;
   const shades = [C.levels.SECOND_QUARTILE, C.levels.THIRD_QUARTILE, C.levels.FOURTH_QUARTILE, C.levels.FOURTH_QUARTILE];
   const logo = LOGO.flatMap((row, r) =>
     [...row].map((ch, c) => {
@@ -200,21 +266,22 @@ function whoamiSvg(s) {
       return `<rect x="${40 + c * 21}" y="${top - 12 + r * 21}" width="18" height="18" rx="3" fill="${fill}"/>`;
     }),
   ).join("");
-  const head = `<text x="290" y="${top}" font-size="15"><tspan class="accent" font-weight="700">Sebastian Goscinski</tspan><tspan class="muted"> · ${LOGIN}</tspan></text>
-<text x="290" y="${top + 12}" font-size="13" class="muted">${"─".repeat(48)}</text>`;
+  const head = `<text x="${TX}" y="${top}" font-size="15"><tspan class="accent" font-weight="700">Sebastian Goscinski</tspan><tspan class="muted"> · ${LOGIN}</tspan></text>
+<text x="${TX}" y="${top + 12}" font-size="13" class="muted">${"─".repeat(48)}</text>`;
   const kv = rows
     .map(
       ([k, v], i) =>
-        `<text x="290" y="${top + 38 + i * lh}" font-size="14"><tspan class="prompt" font-weight="700">${esc(k.padEnd(10))}</tspan><tspan> ${esc(v)}</tspan></text>`,
+        `<text x="${TX}" y="${top + 38 + i * lh}" font-size="14"><tspan class="prompt" font-weight="700">${esc(k.padEnd(10))}</tspan><tspan> ${esc(v)}</tspan></text>`,
     )
     .join("\n");
   const palette = Object.values(C.levels)
     .concat(["#58a6ff", "#bc8cff", "#ff7b72"])
-    .map((c, i) => `<rect x="${290 + i * 26}" y="${top + 38 + rows.length * lh - 4}" width="22" height="12" rx="2" fill="${c}"/>`)
+    .map((c, i) => `<rect x="${TX + i * 26}" y="${top + 38 + rows.length * lh - 4}" width="22" height="12" rx="2" fill="${c}"/>`)
     .join("");
-  const height = top + 38 + rows.length * lh + 40;
+  const portraitBottom = dots ? top - 22 + PORTRAIT.size : 0;
+  const height = Math.max(top + 38 + rows.length * lh + 40, portraitBottom + 44);
   const cursor = `<rect class="cursor" x="24" y="${height - 30}" width="9" height="16" fill="${C.accent}"/>`;
-  return window({ height, title: `${LOGIN} — zsh`, command: "whoami", body: [logo, head, kv, palette, cursor].join("\n") });
+  return window({ height, title: `${LOGIN} — zsh`, command: "whoami", body: [portrait ?? logo, head, kv, palette, cursor].join("\n") });
 }
 
 // ---------------------------------------------------------------------------
@@ -339,8 +406,10 @@ ${bars}`;
 // ---------------------------------------------------------------------------
 const data = await loadData();
 const stats = computeStats(data);
+const avatar = await loadAvatar(data);
+const dots = avatar ? await toHalftone(avatar) : null;
 await mkdir(OUT, { recursive: true });
-await writeFile(join(OUT, "whoami.svg"), whoamiSvg(stats));
+await writeFile(join(OUT, "whoami.svg"), whoamiSvg(stats, dots));
 await writeFile(join(OUT, "contributions.svg"), contributionsSvg(stats));
 await writeFile(join(OUT, "stats.svg"), statsSvg(stats));
 console.log(
