@@ -30,7 +30,9 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci
+      # sharp ships prebuilt binaries as optional packages, so no install
+      # scripts are needed – and none from any dependency get to run.
+      - run: npm ci --ignore-scripts
 
       - name: Generate SVGs
         env:
