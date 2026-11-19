@@ -8,7 +8,8 @@ on:
     branches: [master]
     paths:
       - "scripts/**"
-      - "package*.json"
+      - "package.json"
+      - "pnpm-lock.yaml"
       - ".github/workflows/update-profile.yml"
 
 permissions:
@@ -25,12 +26,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # pnpm version comes from "packageManager" in package.json
+      - uses: pnpm/action-setup@v6
+
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      # sharp ships prebuilt binaries as optional packages, so no install
+      # scripts are needed – and none from any dependency get to run.
+      - run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Generate SVGs
         env:

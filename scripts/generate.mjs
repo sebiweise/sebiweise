@@ -16,6 +16,12 @@ import sharp from "sharp";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "assets");
 const LOGIN = process.env.GH_LOGIN || "sebiweise";
+if (!/^[A-Za-z0-9-]{1,39}$/.test(LOGIN)) throw new Error("GH_LOGIN is not a valid GitHub login");
+
+// Strip control characters (newlines, ANSI escapes) before text from APIs
+// or errors ends up in the log, so it can't forge or hide log lines.
+// eslint-disable-next-line no-control-regex
+const logSafe = (v) => String(v).replace(/[\u0000-\u001f\u007f-\u009f]/g, " ").slice(0, 300);
 
 // ---------------------------------------------------------------------------
 // Profile text for `whoami` – edit here, the workflow regenerates the SVG.
@@ -152,11 +158,11 @@ async function loadRepos(data) {
     withRepo.forEach((p, i) => {
       const r = json.data?.[`r${i}`];
       if (r) out[p.slug] = r;
-      else console.warn(`⚠ repo ${p.repo} not found or not public`);
+      else console.warn(`⚠ repo ${logSafe(p.repo)} not found or not public`);
     });
     return out;
   } catch (err) {
-    console.warn(`⚠ repo details not loaded (${err.message})`);
+    console.warn(`⚠ repo details not loaded (${logSafe(err.message)})`);
     return {};
   }
 }
@@ -228,16 +234,26 @@ function computeStats(data) {
 // ---------------------------------------------------------------------------
 // Avatar → ASCII
 // ---------------------------------------------------------------------------
+// Only GitHub's avatar CDN is fetched, over HTTPS, without following
+// redirects and with a size cap – the URL comes from an API response.
+const AVATAR_HOSTS = new Set(["avatars.githubusercontent.com"]);
+const AVATAR_MAX_BYTES = 5 * 1024 * 1024;
+
 async function loadAvatar(data) {
   const i = process.argv.indexOf("--avatar");
   try {
     if (i !== -1) return await readFile(process.argv[i + 1]);
     if (!data.user.avatarUrl) return null;
-    const res = await fetch(data.user.avatarUrl);
+    const url = new URL(data.user.avatarUrl);
+    if (url.protocol !== "https:" || !AVATAR_HOSTS.has(url.hostname)) throw new Error("unexpected avatar host");
+    const res = await fetch(url, { redirect: "error" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return Buffer.from(await res.arrayBuffer());
+    if (Number(res.headers.get("content-length") ?? 0) > AVATAR_MAX_BYTES) throw new Error("avatar too large");
+    const buf = Buffer.from(await res.arrayBuffer());
+    if (buf.length > AVATAR_MAX_BYTES) throw new Error("avatar too large");
+    return buf;
   } catch (err) {
-    console.warn(`⚠ avatar not loaded (${err.message}), using pixel logo`);
+    console.warn(`⚠ avatar not loaded (${logSafe(err.message)}), using pixel logo`);
     return null;
   }
 }
@@ -620,5 +636,5 @@ for (const [i, p] of PROJECTS.entries())
   await writeFile(join(OUT, `project-${p.slug}.svg`), inGrid(projectSvg(p, repos[p.slug]), 440, 164, i, 2));
 for (const [i, l] of LINKS.entries()) await writeFile(join(OUT, `link-${l.slug}.svg`), inGrid(linkSvg(l), 214, 64, i, 4));
 console.log(
-  `✔ ${stats.total} contributions · streak ${stats.current.len}/${stats.longest.len} · ${stats.active} active days → assets/`,
+  `✔ ${Number(stats.total)} contributions · streak ${Number(stats.current.len)}/${Number(stats.longest.len)} · ${Number(stats.active)} active days → assets/`,
 );
