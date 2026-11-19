@@ -30,6 +30,35 @@ const PROFILE = [
   ["web", "goscinski.dev"],
 ];
 
+// Projects and links – each one becomes its own clickable card.
+// `repo` pulls description, language, stars and last push from GitHub;
+// `description` overrides the repo description. The card links to `live`
+// if set (footer shows "live ↗"), otherwise to the repo (footer shows "repo ↗").
+// After adding an entry here, add the matching <a><img></a> to README.md.
+// ---------------------------------------------------------------------------
+const PROJECTS = [
+  { slug: "security-workflows", repo: "sebiweise/security-workflows", tag: "github action",
+    description: "Reusable workflow that security-scans any repo with open-source tools only: Semgrep, Trivy and Gitleaks." },
+  { slug: "devops-manager", name: "DevOps Manager", repo: "sebiweise/devops-manager", tag: "in development",
+    description: "Self-hosted insights for GitHub repos, Actions and runners: run times, success rates, queue times and costs." },
+  { slug: "solo-runner", repo: "sebiweise/solo-runner", tag: "self-hosted",
+    description: "Fresh, single-use self-hosted Actions runners for all private repos of a personal account. No org needed." },
+  { slug: "rueckenwind", name: "Rückenwind", repo: "sebiweise/rueckenwind", live: "https://rueckenwind-web.vercel.app", tag: "pwa",
+    description: "Guides people with statutory health insurance in Germany towards an outpatient psychotherapy place." },
+  { slug: "home-assistant-alamos", name: "Alamos for Home Assistant", repo: "sebiweise/home-assistant-alamos", tag: "integration",
+    description: "Alamos alerting (aPager PRO, AMweb) as Home Assistant sensors and events, incl. alert feedback." },
+  { slug: "gemuetlich", name: "Gemütlich", live: "https://gemuetlich.goscinski.dev", tag: "live",
+    description: "Turns a TV into a cosy room with a live-generated fireplace, weather and ambience scenes." },
+];
+
+const LINKS = [
+  { slug: "portfolio", label: "portfolio", value: "goscinski.dev", href: "https://goscinski.dev" },
+  { slug: "linkedin", label: "linkedin", value: "sebastian-weise", href: "https://www.linkedin.com/in/sebastian-weise" },
+  { slug: "keoz", label: "work", value: "KEOZ GmbH", href: "https://www.keoz.com" },
+  { slug: "implet", label: "side", value: "Implet", href: "https://www.implet.com" },
+];
+
+// ---------------------------------------------------------------------------
 // Halftone portrait settings
 const PORTRAIT = {
   grid: 64, // dots per side
@@ -91,20 +120,53 @@ query($login: String!) {
   }
 }`;
 
+async function graphql(query, variables) {
+  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+  if (!token) throw new Error("Set GH_TOKEN (or pass --fixture <file>).");
+  const res = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: { Authorization: `bearer ${token}`, "Content-Type": "application/json", "User-Agent": LOGIN },
+    body: JSON.stringify({ query, variables }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(`GitHub API: ${res.status} ${JSON.stringify(json)}`);
+  return json;
+}
+
+// Repo details for the project cards. A missing or private repo is not an
+// error: the card just falls back to the text from PROJECTS.
+async function loadRepos(data) {
+  if (data.repos) return data.repos; // fixture
+  const withRepo = PROJECTS.filter((p) => p.repo);
+  if (!withRepo.length) return {};
+  const fields = "description url stargazerCount pushedAt primaryLanguage { name color }";
+  const query = `query { ${withRepo
+    .map((p, i) => {
+      const [owner, name] = p.repo.split("/");
+      return `r${i}: repository(owner: ${JSON.stringify(owner)}, name: ${JSON.stringify(name)}) { ${fields} }`;
+    })
+    .join("\n")} }`;
+  try {
+    const json = await graphql(query);
+    const out = {};
+    withRepo.forEach((p, i) => {
+      const r = json.data?.[`r${i}`];
+      if (r) out[p.slug] = r;
+      else console.warn(`⚠ repo ${p.repo} not found or not public`);
+    });
+    return out;
+  } catch (err) {
+    console.warn(`⚠ repo details not loaded (${err.message})`);
+    return {};
+  }
+}
+
 async function loadData() {
   const i = process.argv.indexOf("--fixture");
   if (i !== -1) return JSON.parse(await readFile(process.argv[i + 1], "utf8"));
 
-  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
-  if (!token) throw new Error("Set GH_TOKEN (or pass --fixture <file>).");
-
-  const res = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: { Authorization: `bearer ${token}`, "Content-Type": "application/json", "User-Agent": LOGIN },
-    body: JSON.stringify({ query: QUERY, variables: { login: LOGIN } }),
-  });
-  const json = await res.json();
-  if (!res.ok || json.errors) throw new Error(`GitHub API: ${res.status} ${JSON.stringify(json.errors ?? json)}`);
+  const json = await graphql(QUERY, { login: LOGIN });
+  if (json.errors) throw new Error(`GitHub API: ${JSON.stringify(json.errors)}`);
   return json.data;
 }
 
@@ -404,6 +466,146 @@ ${bars}`;
 }
 
 // ---------------------------------------------------------------------------
+// 4) project cards, link cards
+// ---------------------------------------------------------------------------
+const CARD_STYLE = `<style>
+  text { font-family: ${FONT}; fill: ${C.text}; }
+  .muted { fill: ${C.muted}; }
+  .accent { fill: ${C.accent}; }
+  .prompt { fill: ${C.prompt}; }
+  .cursor { animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+</style>`;
+
+// rough monospace advance, good enough for layout
+const tw = (str, size) => [...str].length * size * 0.6;
+
+function wrap(text, maxChars, maxLines) {
+  const words = text.split(/\s+/);
+  const lines = [""];
+  for (const w of words) {
+    const cur = lines[lines.length - 1];
+    if ((cur ? cur.length + 1 : 0) + w.length <= maxChars) lines[lines.length - 1] = cur ? `${cur} ${w}` : w;
+    else if (lines.length < maxLines) lines.push(w);
+    else {
+      lines[lines.length - 1] = `${cur.slice(0, maxChars - 1).trimEnd()}…`;
+      return lines;
+    }
+  }
+  return lines;
+}
+
+function ago(iso) {
+  const d = Math.floor((Date.now() - new Date(iso)) / 864e5);
+  if (d <= 0) return "today";
+  if (d === 1) return "yesterday";
+  if (d < 31) return `${d}d ago`;
+  if (d < 365) return `${Math.floor(d / 30)}mo ago`;
+  return `${Math.floor(d / 365)}y ago`;
+}
+
+const host = (url) => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+// small "↗" drawn as a path, so it doesn't depend on fonts
+const arrow = (x, y, color = C.accent) =>
+  `<path d="M${x} ${y} l7 -7 M${x + 2} ${y - 7} h5 v5" stroke="${color}" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+const star = (cx, cy) => {
+  const pts = [];
+  for (let i = 0; i < 10; i++) {
+    const r = i % 2 ? 2.6 : 6;
+    const a = (Math.PI / 5) * i - Math.PI / 2;
+    pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`);
+  }
+  return `<polygon points="${pts.join(" ")}" fill="${C.muted}"/>`;
+};
+
+// Cards sit side by side at exactly 100% / cols in the README, with no
+// whitespace in between. The gap is built into the SVGs: column i gets
+// GAP·i/cols padding on the left and GAP·(cols-1-i)/cols on the right, so all
+// cards have the same visible width, every gap is GAP wide, and each row lines
+// up exactly with the full-width panels.
+const GAP = 12;
+function inGrid(svg, w, h, i, cols) {
+  const col = i % cols;
+  const padL = (GAP * col) / cols;
+  const outerW = w + (GAP * (cols - 1)) / cols;
+  const outerH = h + GAP;
+  const label = svg.match(/aria-label="([^"]*)"/)?.[1] ?? "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${outerW}" height="${outerH}" viewBox="0 0 ${outerW} ${outerH}" role="img" aria-label="${label}">
+${svg.replace("<svg ", `<svg x="${padL}" y="0" `)}</svg>
+`;
+}
+
+function projectSvg(p, repo) {
+  const w = 440;
+  const h = 164;
+  const name = p.name ?? p.repo?.split("/")[1] ?? p.slug;
+  const desc = p.description ?? repo?.description ?? "";
+  const lines = wrap(desc, 50, 3);
+
+  const tag = p.tag
+    ? (() => {
+        const tWidth = tw(p.tag, 11) + 18;
+        return `<rect x="${w - 20 - tWidth}" y="44" width="${tWidth}" height="22" rx="11" fill="none" stroke="${p.tag === "in development" ? "#d29922" : C.accent}"/>
+<text x="${w - 20 - tWidth / 2}" y="59" font-size="11" text-anchor="middle" fill="${p.tag === "in development" ? "#d29922" : C.accent}">${esc(p.tag)}</text>`;
+      })()
+    : "";
+
+  // footer: language · stars · updated  ……  live ↗
+  const fy = h - 18;
+  let fx = 20;
+  const foot = [];
+  if (repo?.primaryLanguage) {
+    foot.push(`<circle cx="${fx + 5}" cy="${fy - 4}" r="5" fill="${repo.primaryLanguage.color ?? C.muted}"/>`);
+    foot.push(`<text x="${fx + 15}" y="${fy}" font-size="12" class="muted">${esc(repo.primaryLanguage.name)}</text>`);
+    fx += 15 + tw(repo.primaryLanguage.name, 12) + 16;
+  }
+  if (repo) {
+    foot.push(star(fx + 6, fy - 4));
+    foot.push(`<text x="${fx + 16}" y="${fy}" font-size="12" class="muted">${repo.stargazerCount}</text>`);
+    fx += 16 + tw(String(repo.stargazerCount), 12) + 16;
+    foot.push(`<text x="${fx}" y="${fy}" font-size="12" class="muted">updated ${ago(repo.pushedAt)}</text>`);
+  }
+  if (p.live) {
+    // with repo stats in the footer there is only room for a short label
+    const label = repo ? "live" : host(p.live);
+    const lx = w - 20 - 12 - tw(label, 12);
+    foot.push(`<text x="${lx}" y="${fy}" font-size="12" class="accent">${esc(label)}</text>`);
+    foot.push(arrow(w - 28, fy));
+  } else if (repo) {
+    const label = "repo";
+    foot.push(`<text x="${w - 32 - tw(label, 12)}" y="${fy}" font-size="12" class="prompt">${label}</text>`);
+    foot.push(arrow(w - 28, fy, C.prompt));
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(`${name}: ${desc}`)}">
+${CARD_STYLE}
+<rect x="0.5" y="0.5" width="${w - 1}" height="${h - 1}" rx="10" fill="${C.bg}" stroke="${C.border}"/>
+<path d="M0.5 30 H${w - 0.5}" stroke="${C.border}"/>
+<circle cx="18" cy="15" r="4.5" fill="#ff5f57"/><circle cx="33" cy="15" r="4.5" fill="#febc2e"/><circle cx="48" cy="15" r="4.5" fill="#28c840"/>
+<text x="${w / 2}" y="19" text-anchor="middle" font-size="11" class="muted">~/projects/${esc(p.slug)}</text>
+<text x="20" y="61" font-size="17" font-weight="700" class="accent">${esc(name)}</text>
+${tag}
+${lines.map((l, i) => `<text x="20" y="${88 + i * 18}" font-size="13" fill="#c9d1d9">${esc(l)}</text>`).join("\n")}
+${foot.join("\n")}
+</svg>
+`;
+}
+
+function linkSvg(l) {
+  const w = 214;
+  const h = 64;
+  return `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(`${l.label}: ${l.value}`)}">
+${CARD_STYLE}
+<rect x="0.5" y="0.5" width="${w - 1}" height="${h - 1}" rx="10" fill="${C.bg}" stroke="${C.border}"/>
+<text x="16" y="25" font-size="11" class="muted">$ ${esc(l.label)}</text>
+<text x="16" y="47" font-size="14" font-weight="700" class="accent">${esc(l.value)}</text>
+${arrow(w - 26, 46)}
+</svg>
+`;
+}
+
+// ---------------------------------------------------------------------------
 const data = await loadData();
 const stats = computeStats(data);
 const avatar = await loadAvatar(data);
@@ -412,6 +614,11 @@ await mkdir(OUT, { recursive: true });
 await writeFile(join(OUT, "whoami.svg"), whoamiSvg(stats, dots));
 await writeFile(join(OUT, "contributions.svg"), contributionsSvg(stats));
 await writeFile(join(OUT, "stats.svg"), statsSvg(stats));
+
+const repos = await loadRepos(data);
+for (const [i, p] of PROJECTS.entries())
+  await writeFile(join(OUT, `project-${p.slug}.svg`), inGrid(projectSvg(p, repos[p.slug]), 440, 164, i, 2));
+for (const [i, l] of LINKS.entries()) await writeFile(join(OUT, `link-${l.slug}.svg`), inGrid(linkSvg(l), 214, 64, i, 4));
 console.log(
   `✔ ${stats.total} contributions · streak ${stats.current.len}/${stats.longest.len} · ${stats.active} active days → assets/`,
 );
