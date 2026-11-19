@@ -1,36 +1,15 @@
-<img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/whoami.svg" alt="sebiweise@github ~ $ whoami" width="100%">
+<a href="https://goscinski.dev"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/whoami.svg" alt="sebiweise@github ~ $ whoami (goscinski.dev)" width="100%"></a>
 
 <img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/contributions.svg" alt="Contribution heatmap for the last year" width="100%">
 
 <img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/stats.svg" alt="Streaks, active days and contributions per month" width="100%">
 
-### Hi there 👋, I'm Sebastian
+<p>
+<a href="https://github.com/sebiweise/security-workflows"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-security-workflows.svg" alt="security-workflows" width="50%"></a><a href="https://github.com/sebiweise/devops-manager"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-devops-manager.svg" alt="DevOps Manager" width="50%"></a><a href="https://github.com/sebiweise/solo-runner"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-solo-runner.svg" alt="solo-runner" width="50%"></a><a href="https://rueckenwind-web.vercel.app"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-rueckenwind.svg" alt="Rückenwind" width="50%"></a><a href="https://github.com/sebiweise/home-assistant-alamos"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-home-assistant-alamos.svg" alt="Alamos for Home Assistant" width="50%"></a><a href="https://gemuetlich.goscinski.dev"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-gemuetlich.svg" alt="Gemütlich" width="50%"></a>
+</p>
 
-![GitHub followers](https://img.shields.io/github/followers/sebiweise?logo=GitHub&style=for-the-badge)
+<p>
+<a href="https://goscinski.dev"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/link-portfolio.svg" alt="Portfolio: goscinski.dev" width="25%"></a><a href="https://www.linkedin.com/in/sebastian-weise"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/link-linkedin.svg" alt="LinkedIn: sebastian-weise" width="25%"></a><a href="https://www.keoz.com"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/link-keoz.svg" alt="Work: KEOZ GmbH" width="25%"></a><a href="https://www.implet.com"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/link-implet.svg" alt="Side: Implet" width="25%"></a>
+</p>
 
-DevOps Specialist at [KEOZ GmbH](https://www.keoz.com) in Germany. I take care of operations, automation, deployments and CI/CD, drawing on my background in software development, cloud and infrastructure to keep systems reliable and scalable. On the side, I work as a developer at [Implet](https://www.implet.com).
-
-- 🌐 Portfolio: [goscinski.dev](https://goscinski.dev)
-- 💼 LinkedIn: [sebastian-weise](https://www.linkedin.com/in/sebastian-weise)
-- 🚒 Volunteer firefighter at Freiwillige Feuerwehr Langenfeld
-
-### Projects
-
-- 🛡️ [security-workflows](https://github.com/sebiweise/security-workflows): reusable GitHub Actions workflow that security-scans any repo with open-source tools only: Semgrep (SAST), Trivy (dependencies, Dockerfile misconfigurations) and Gitleaks (secrets in git history).
-- 📊 [DevOps Manager](https://github.com/sebiweise/devops-manager): self-hosted insights and management for GitHub repositories, Actions workflows and runners: run times, success rates, queue times and costs across all repositories, plus re-runs, variables and merges with roles and an audit log. *In development.*
-- 🏃 [solo-runner](https://github.com/sebiweise/solo-runner): self-hosted GitHub Actions runners for all the private repos of a personal account, without a GitHub organisation. One container watches every repo for queued jobs and starts a fresh, single-use runner for each one.
-- 🔥 Gemütlich: turns a TV into a cosy room with a live-generated fireplace, weather and ambience scenes. [Live](https://gemuetlich.goscinski.dev)
-- 🧭 [Rückenwind](https://github.com/sebiweise/rueckenwind): open-source PWA that guides people with statutory health insurance in Germany towards an outpatient psychotherapy place. [Live](https://rueckenwind-web.vercel.app)
-- 🏠 [Alamos for Home Assistant](https://github.com/sebiweise/home-assistant-alamos): Home Assistant integration for Alamos alerting (aPager PRO, AMweb), with alerts as sensors and events plus alert feedback.
-- 👤 personal-portfolio: the source of my portfolio, built with Next.js and deployed on Vercel. [Live](https://goscinski.dev)
-
-### Languages and Tools
-
-- CI/CD, DevOps, Deployments
-- GitHub Actions
-- TypeScript, Node.js
-- Next.js, React
-- Python
-- Linux
-
-<sub>The terminal panels above are SVGs regenerated daily by [a GitHub Action](./.github/workflows/update-profile.yml) from the GitHub API, including a halftone version of my current avatar (no third-party services).</sub>
+<sub>Everything above is SVG, regenerated daily by [a GitHub Action](./.github/workflows/update-profile.yml) from the GitHub API, portrait and repo stats included. No third-party services.</sub>
