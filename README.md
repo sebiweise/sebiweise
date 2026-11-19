@@ -4,8 +4,6 @@
 
 <img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/stats.svg" alt="Streaks, active days and contributions per month" width="100%">
 
-<img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/section-projects.svg" alt="$ ls ~/projects" width="100%">
-
 <p>
 <a href="https://github.com/sebiweise/security-workflows"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-security-workflows.svg" alt="security-workflows" width="49%"></a>
 <a href="https://github.com/sebiweise/devops-manager"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-devops-manager.svg" alt="DevOps Manager" width="49%"></a>
@@ -14,8 +12,6 @@
 <a href="https://github.com/sebiweise/home-assistant-alamos"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-home-assistant-alamos.svg" alt="Alamos for Home Assistant" width="49%"></a>
 <a href="https://gemuetlich.goscinski.dev"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/project-gemuetlich.svg" alt="Gemütlich" width="49%"></a>
 </p>
-
-<img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/section-links.svg" alt="$ ./links.sh" width="100%">
 
 <p>
 <a href="https://goscinski.dev"><img src="https://raw.githubusercontent.com/sebiweise/sebiweise/output/link-portfolio.svg" alt="Portfolio: goscinski.dev" width="24%"></a>

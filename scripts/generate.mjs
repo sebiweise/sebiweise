@@ -466,7 +466,7 @@ ${bars}`;
 }
 
 // ---------------------------------------------------------------------------
-// 4) section prompts, project cards, link cards
+// 4) project cards, link cards
 // ---------------------------------------------------------------------------
 const CARD_STYLE = `<style>
   text { font-family: ${FONT}; fill: ${C.text}; }
@@ -518,17 +518,6 @@ const star = (cx, cy) => {
   }
   return `<polygon points="${pts.join(" ")}" fill="${C.muted}"/>`;
 };
-
-function sectionSvg(command) {
-  const w = W;
-  const h = 46;
-  return `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(command)}">
-${CARD_STYLE}
-<rect x="0.5" y="0.5" width="${w - 1}" height="${h - 1}" rx="10" fill="${C.bg}" stroke="${C.border}"/>
-<text x="24" y="28" font-size="14"><tspan class="accent">${LOGIN}@github</tspan><tspan class="muted"> ~ </tspan><tspan class="prompt">$</tspan> ${esc(command)} <tspan class="accent cursor">█</tspan></text>
-</svg>
-`;
-}
 
 function projectSvg(p, repo) {
   const w = 440;
@@ -610,8 +599,6 @@ await writeFile(join(OUT, "contributions.svg"), contributionsSvg(stats));
 await writeFile(join(OUT, "stats.svg"), statsSvg(stats));
 
 const repos = await loadRepos(data);
-await writeFile(join(OUT, "section-projects.svg"), sectionSvg("ls ~/projects"));
-await writeFile(join(OUT, "section-links.svg"), sectionSvg("./links.sh"));
 for (const p of PROJECTS) await writeFile(join(OUT, `project-${p.slug}.svg`), projectSvg(p, repos[p.slug]));
 for (const l of LINKS) await writeFile(join(OUT, `link-${l.slug}.svg`), linkSvg(l));
 console.log(
