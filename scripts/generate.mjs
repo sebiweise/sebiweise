@@ -519,6 +519,23 @@ const star = (cx, cy) => {
   return `<polygon points="${pts.join(" ")}" fill="${C.muted}"/>`;
 };
 
+// Cards sit side by side at exactly 100% / cols in the README, with no
+// whitespace in between. The gap is built into the SVGs: column i gets
+// GAP·i/cols padding on the left and GAP·(cols-1-i)/cols on the right, so all
+// cards have the same visible width, every gap is GAP wide, and each row lines
+// up exactly with the full-width panels.
+const GAP = 12;
+function inGrid(svg, w, h, i, cols) {
+  const col = i % cols;
+  const padL = (GAP * col) / cols;
+  const outerW = w + (GAP * (cols - 1)) / cols;
+  const outerH = h + GAP;
+  const label = svg.match(/aria-label="([^"]*)"/)?.[1] ?? "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${outerW}" height="${outerH}" viewBox="0 0 ${outerW} ${outerH}" role="img" aria-label="${label}">
+${svg.replace("<svg ", `<svg x="${padL}" y="0" `)}</svg>
+`;
+}
+
 function projectSvg(p, repo) {
   const w = 440;
   const h = 164;
@@ -599,8 +616,9 @@ await writeFile(join(OUT, "contributions.svg"), contributionsSvg(stats));
 await writeFile(join(OUT, "stats.svg"), statsSvg(stats));
 
 const repos = await loadRepos(data);
-for (const p of PROJECTS) await writeFile(join(OUT, `project-${p.slug}.svg`), projectSvg(p, repos[p.slug]));
-for (const l of LINKS) await writeFile(join(OUT, `link-${l.slug}.svg`), linkSvg(l));
+for (const [i, p] of PROJECTS.entries())
+  await writeFile(join(OUT, `project-${p.slug}.svg`), inGrid(projectSvg(p, repos[p.slug]), 440, 164, i, 2));
+for (const [i, l] of LINKS.entries()) await writeFile(join(OUT, `link-${l.slug}.svg`), inGrid(linkSvg(l), 214, 64, i, 4));
 console.log(
   `✔ ${stats.total} contributions · streak ${stats.current.len}/${stats.longest.len} · ${stats.active} active days → assets/`,
 );
