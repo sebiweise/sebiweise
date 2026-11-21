@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="446" height="176" viewBox="0 0 446 176" role="img" aria-label="Alamos for Home Assistant: Alamos alerting (aPager PRO, AMweb) as Home Assistant sensors and events, incl. alert feedback.">
+<svg x="0" y="0" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="440" height="164" viewBox="0 0 440 164" role="img" aria-label="Alamos for Home Assistant: Alamos alerting (aPager PRO, AMweb) as Home Assistant sensors and events, incl. alert feedback.">
+<style>
+  text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; fill: #e6edf3; }
+  .muted { fill: #8b949e; }
+  .accent { fill: #39d353; }
+  .prompt { fill: #58a6ff; }
+  .cursor { animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+</style>
+<rect x="0.5" y="0.5" width="439" height="163" rx="10" fill="#0d1117" stroke="#30363d"/>
+<path d="M0.5 30 H439.5" stroke="#30363d"/>
+<circle cx="18" cy="15" r="4.5" fill="#ff5f57"/><circle cx="33" cy="15" r="4.5" fill="#febc2e"/><circle cx="48" cy="15" r="4.5" fill="#28c840"/>
+<text x="220" y="19" text-anchor="middle" font-size="11" class="muted">~/projects/home-assistant-alamos</text>
+<text x="20" y="61" font-size="17" font-weight="700" class="accent">Alamos for Home Assistant</text>
+<rect x="329.4" y="44" width="90.6" height="22" rx="11" fill="none" stroke="#39d353"/>
+<text x="374.7" y="59" font-size="11" text-anchor="middle" fill="#39d353">integration</text>
+<text x="20" y="88" font-size="13" fill="#c9d1d9">Alamos alerting (aPager PRO, AMweb) as Home</text>
+<text x="20" y="106" font-size="13" fill="#c9d1d9">Assistant sensors and events, incl. alert</text>
+<text x="20" y="124" font-size="13" fill="#c9d1d9">feedback.</text>
+<circle cx="25" cy="142" r="5" fill="#3572A5"/>
+<text x="35" y="146" font-size="12" class="muted">Python</text>
+<polygon points="100.2,136.0 101.7,139.9 105.9,140.1 102.7,142.8 103.7,146.9 100.2,144.6 96.7,146.9 97.7,142.8 94.5,140.1 98.7,139.9" fill="#8b949e"/>
+<text x="110.19999999999999" y="146" font-size="12" class="muted">1</text>
+<text x="133.39999999999998" y="146" font-size="12" class="muted">updated yesterday</text>
+<text x="379.2" y="146" font-size="12" class="prompt">repo</text>
+<path d="M412 146 l7 -7 M414 139 h5 v5" stroke="#58a6ff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</svg>
