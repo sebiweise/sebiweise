@@ -47,7 +47,7 @@ const PROJECTS = [
     description: "Reusable workflow that security-scans any repo with open-source tools only: Semgrep, Trivy and Gitleaks." },
   { slug: "solo-runner", repo: "sebiweise/solo-runner", tag: "self-hosted",
     description: "Fresh, single-use self-hosted Actions runners for all private repos of a personal account. No org needed." },
-  { slug: "rueckenwind", name: "Rückenwind", repo: "sebiweise/rueckenwind", live: "https://rueckenwind-web.vercel.app", tag: "pwa",
+  { slug: "rueckenwind", name: "Rückenwind", repo: "sebiweise/rueckenwind", live: "https://sebiweise.github.io/rueckenwind/", tag: "pwa",
     description: "Guides people with statutory health insurance in Germany towards an outpatient psychotherapy place." },
   { slug: "home-assistant-alamos", name: "Alamos for Home Assistant", repo: "sebiweise/home-assistant-alamos", tag: "integration",
     description: "Alamos alerting (aPager PRO, AMweb) as Home Assistant sensors and events, incl. alert feedback." },
