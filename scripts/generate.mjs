@@ -45,8 +45,6 @@ const PROFILE = [
 const PROJECTS = [
   { slug: "security-workflows", repo: "sebiweise/security-workflows", tag: "github action",
     description: "Reusable workflow that security-scans any repo with open-source tools only: Semgrep, Trivy and Gitleaks." },
-  { slug: "devops-manager", name: "DevOps Manager", repo: "sebiweise/devops-manager", tag: "in development",
-    description: "Self-hosted insights for GitHub repos, Actions and runners: run times, success rates, queue times and costs." },
   { slug: "solo-runner", repo: "sebiweise/solo-runner", tag: "self-hosted",
     description: "Fresh, single-use self-hosted Actions runners for all private repos of a personal account. No org needed." },
   { slug: "rueckenwind", name: "Rückenwind", repo: "sebiweise/rueckenwind", live: "https://rueckenwind-web.vercel.app", tag: "pwa",
