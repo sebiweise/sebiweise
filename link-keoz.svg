@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="223" height="76" viewBox="0 0 223 76" role="img" aria-label="work: KEOZ GmbH">
+<svg x="6" y="0" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="214" height="64" viewBox="0 0 214 64" role="img" aria-label="work: KEOZ GmbH">
+<style>
+  text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; fill: #e6edf3; }
+  .muted { fill: #8b949e; }
+  .accent { fill: #39d353; }
+  .prompt { fill: #58a6ff; }
+  .cursor { animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+</style>
+<rect x="0.5" y="0.5" width="213" height="63" rx="10" fill="#0d1117" stroke="#30363d"/>
+<text x="16" y="25" font-size="11" class="muted">$ work</text>
+<text x="16" y="47" font-size="14" font-weight="700" class="accent">KEOZ GmbH</text>
+<path d="M188 46 l7 -7 M190 39 h5 v5" stroke="#39d353" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</svg>
